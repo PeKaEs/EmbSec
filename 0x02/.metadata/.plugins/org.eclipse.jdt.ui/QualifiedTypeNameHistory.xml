@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="javacard.security.MessageDigest"/>
+<fullyQualifiedTypeName name="javacard.security.PublicKey"/>
+<fullyQualifiedTypeName name="javacard.security.PrivateKey"/>
+<fullyQualifiedTypeName name="javacard.security.KeyBuilder"/>
+<fullyQualifiedTypeName name="javacard.security.CryptoException"/>
+</qualifiedTypeNameHistroy>

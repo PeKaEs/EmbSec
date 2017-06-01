@@ -1,0 +1,10 @@
+// Applet Selection APDU Script
+//
+// Package:     com.lab31
+// Package AID: //aid/0000000000/
+// Applet:      Task1
+// Applet AID:  //aid/0000000000/01
+//
+
+// Select Task1 applet
+0x00 0xA4 0x04 0x00 0x06 0x00 0x00 0x00 0x00 0x00 0x01 0x7F;

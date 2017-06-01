@@ -1,0 +1,278 @@
+// converted by version  [v3.0.5]
+// on Thu May 04 00:38:30 CEST 2017
+
+.package com/example/MyHello {
+	.aid 0x0:0x0:0x0:0x0:0x0:0x0;
+	.version 1.0;
+
+	.imports {
+		0xA0:0x0:0x0:0x0:0x62:0x1:0x1 1.6;		//javacard/framework
+		0xA0:0x0:0x0:0x0:0x62:0x0:0x1 1.0;		//java/lang
+	}
+
+	.applet {
+		0x0:0x0:0x0:0x0:0x0:0x1 HelloWorld;
+	}
+
+	.constantPool {
+		// 0
+		staticMethodRef 0.3.0()V;		// javacard/framework/Applet.<init>()V
+		// 1
+		virtualMethodRef 0.3.1()V;		// register()V
+		// 2
+		.classRef HelloWorld;
+		// 3
+		staticMethodRef HelloWorld/<init>([BSB)V;
+		// 4
+		virtualMethodRef 0.3.3()Z;		// selectingApplet()Z
+		// 5
+		virtualMethodRef 0.10.1()[B;		// getBuffer()[B
+		// 6
+		staticMethodRef 0.7.1(S)V;		// javacard/framework/ISOException.throwIt(S)V
+		// 7
+		staticMethodRef HelloWorld/getHelloWorld(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 8
+		staticMethodRef HelloWorld/getEmb(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 9
+		staticMethodRef HelloWorld/getReversedAPDU(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+		// 10
+		staticMethodRef HelloWorld/reverse([B)V;
+		// 11
+		virtualMethodRef 0.10.8(SS)V;		// setOutgoingAndSend(SS)V
+		// 12
+		staticFieldRef byte[] HelloWorld/embSec;
+		// 13
+		staticMethodRef 0.16.2([BS[BSS)S;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
+		// 14
+		staticFieldRef byte[] HelloWorld/helloWorld;
+	}
+
+	.class public HelloWorld 0 extends 0.3 {		// extends javacard/framework/Applet
+
+		.fields {
+			private static final byte[] helloWorld = {72,101,108,108,111,32,87,111,114,108,100};		// [B
+			private static final byte[] embSec = {69,109,98,101,100,100,101,100,32,83,101,99,117,114,105,116,121,32,83,121,115,116,101,109,115};		// [B
+			private static final byte HW_CLA = -128;		// B
+			private static final byte HW_INS = 0;		// B
+			private static final byte HW_INS_EMB = 16;		// B
+			private static final byte HW_INS_REV = 32;		// B
+		}
+
+		.publicMethodTable 6 {
+			equals(Ljava/lang/Object;)Z;
+			register()V;
+			register([BSB)V;
+			selectingApplet()Z;
+			deselect()V;
+			getShareableInterfaceObject(Ljavacard/framework/AID;B)Ljavacard/framework/Shareable;;
+			select()Z;
+			process(Ljavacard/framework/APDU;)V;
+		}
+
+		.packageMethodTable 0 {
+		}
+
+		.method private <init>([BSB)V {
+			.stack 1;
+			.locals 0;
+
+				L0:	aload_0;
+					invokespecial 0;		// javacard/framework/Applet.<init>()V
+					aload_0;
+					invokevirtual 1;		// register()V
+					return;
+		}
+
+		.method public static install([BSB)V 0 {
+			.stack 4;
+			.locals 0;
+
+				L0:	new 2;		// com/example/MyHello/HelloWorld
+					aload_0;
+					sload_1;
+					sload_2;
+					invokespecial 3;		// com/example/MyHello/HelloWorld.<init>([BSB)V
+					return;
+		}
+
+		.method public select()Z 6 {
+			.stack 1;
+			.locals 0;
+
+				L0:	sconst_1;
+					sreturn;
+		}
+
+		.method public process(Ljavacard/framework/APDU;)V 7 {
+			.stack 2;
+			.locals 3;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_0;
+					invokevirtual 4;		// selectingApplet()Z
+					ifeq L2;
+				L1:	return;
+				L2:	aload_1;
+					invokevirtual 5;		// getBuffer()[B
+					astore_2;
+				L3:	aload_2;
+					sconst_0;
+					baload;
+					sspush 255;
+					sand;
+					s2b;
+					sstore_3;
+				L4:	aload_2;
+					sconst_1;
+					baload;
+					sspush 255;
+					sand;
+					s2b;
+					sstore 4;
+				L5:	sload_3;
+					bspush -128;
+					if_scmpeq L7;
+				L6:	sspush 28160;
+					invokestatic 6;		// javacard/framework/ISOException.throwIt(S)V
+				L7:	sload 4;
+					slookupswitch L11 3 0 L8 16 L9 32 L10;
+				L8:	aload_0;
+					aload_1;
+					invokespecial 7;		// com/example/MyHello/HelloWorld.getHelloWorld(Ljavacard/framework/APDU;)V
+					goto L12;
+				L9:	aload_0;
+					aload_1;
+					invokespecial 8;		// com/example/MyHello/HelloWorld.getEmb(Ljavacard/framework/APDU;)V
+					goto L12;
+				L10:	aload_1;
+					invokestatic 9;		// com/example/MyHello/HelloWorld.getReversedAPDU(Ljavacard/framework/APDU;)V
+					goto L12;
+				L11:	sspush 27904;
+					invokestatic 6;		// javacard/framework/ISOException.throwIt(S)V
+				L12:	return;
+		}
+
+		.method public static reverse([B)V 1 {
+			.stack 4;
+			.locals 5;
+
+				L0:	aload_0;
+					ifnonnull L2;
+				L1:	return;
+				L2:	sconst_0;
+					sstore_1;
+				L3:	aload_0;
+					arraylength;
+					s2i;
+					iconst_1;
+					isub;
+					istore_2;
+				L4:	iload_2;
+					i2s;
+					sstore 4;
+				L5:	goto L8;
+				L6:	aload_0;
+					sload 4;
+					baload;
+					sstore 5;
+				L7:	aload_0;
+					sload 4;
+					aload_0;
+					sload_1;
+					baload;
+					bastore;
+					aload_0;
+					sload_1;
+					sload 5;
+					bastore;
+					sinc 4 -1;
+					sinc 1 1;
+				L8:	sload 4;
+					sload_1;
+					if_scmpgt L6;
+				L9:	return;
+		}
+
+		.method private static getReversedAPDU(Ljavacard/framework/APDU;)V {
+			.stack 3;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_0;
+					invokevirtual 5;		// getBuffer()[B
+					astore_1;
+				L1:	aload_1;
+					arraylength;
+					sstore_2;
+				L2:	aload_1;
+					invokestatic 10;		// com/example/MyHello/HelloWorld.reverse([B)V
+					aload_0;
+					sconst_0;
+					sload_2;
+					invokevirtual 11;		// setOutgoingAndSend(SS)V
+					return;
+		}
+
+		.method private getEmb(Ljavacard/framework/APDU;)V {
+			.stack 5;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 5;		// getBuffer()[B
+					astore_2;
+				L1:	getstatic_a 12;		// reference com/example/MyHello/HelloWorld.embSec
+					arraylength;
+					sstore_3;
+				L2:	getstatic_a 12;		// reference com/example/MyHello/HelloWorld.embSec
+					sconst_0;
+					aload_2;
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
+					pop;
+					aload_1;
+					sconst_0;
+					sload_3;
+					invokevirtual 11;		// setOutgoingAndSend(SS)V
+					return;
+		}
+
+		.method private getHelloWorld(Ljavacard/framework/APDU;)V {
+			.stack 5;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	0.10;
+
+				L0:	aload_1;
+					invokevirtual 5;		// getBuffer()[B
+					astore_2;
+				L1:	getstatic_a 14;		// reference com/example/MyHello/HelloWorld.helloWorld
+					arraylength;
+					sstore_3;
+				L2:	getstatic_a 14;		// reference com/example/MyHello/HelloWorld.helloWorld
+					sconst_0;
+					aload_2;
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
+					pop;
+					aload_1;
+					sconst_0;
+					sload_3;
+					invokevirtual 11;		// setOutgoingAndSend(SS)V
+					return;
+		}
+
+	}
+
+}

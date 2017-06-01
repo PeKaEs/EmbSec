@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="com.oracle.javacard.jcdk.launch.jcApplet">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES"/>
+<mapAttribute key="org.eclipse.jdt.launching.CONNECT_MAP">
+<mapEntry key="hostname" value="localhost"/>
+<mapEntry key="port" value="8000"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="javacard.framework.Applet"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="lab3.1"/>
+</launchConfiguration>

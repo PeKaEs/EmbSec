@@ -1,0 +1,10 @@
+// Applet Selection APDU Script
+//
+// Package:     com.example.MyHello
+// Package AID: //aid/0000000000/00
+// Applet:      HelloWorld
+// Applet AID:  //aid/0000000000/01
+//
+
+// Select HelloWorld applet
+0x00 0xA4 0x04 0x00 0x06 0x00 0x00 0x00 0x00 0x00 0x01 0x7F;
