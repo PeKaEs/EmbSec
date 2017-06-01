@@ -1,4 +1,3 @@
 INDEX VERSION 1.130+E:\home\U¿ywane\Studia\II st\I semestr\EmbSec\EmbSec\0x02\.metadata\.plugins\org.eclipse.jdt.core
-1336320054.index
 4272515773.index
 3275903304.index

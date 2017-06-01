@@ -11,7 +11,6 @@ import javacard.security.PublicKey;
 import javacard.security.KeyBuilder;
 import javacard.security.KeyPair;
 import javacard.security.CryptoException;
-import javacard.security.Key;
 import javacard.security.RSAPrivateKey;
 import javacard.security.RSAPublicKey;
 
@@ -42,7 +41,6 @@ public class Task1 extends Applet {
 			*/
 			
 			private static final byte HW_INS_RSA_GEN = (byte) 0x10;
-			private static final byte HW_INS_RSA_GET_PRIV = (byte) 0x20;
 			
 			private byte [] receivedData;
 			private byte [] hashedData;
@@ -119,11 +117,7 @@ public class Task1 extends Applet {
      		mesDig.reset();
      		break;
      	case HW_INS_RSA_GEN:
-     		generateKeyPair();
-     		returnKey(apdu,(byte)0x00);
-     		break;
-     	case HW_INS_RSA_GET_PRIV:
-     		returnKey(apdu,(byte)0x01);
+     		generateKeyPair(apdu);
      		break;
      		
      	default:
@@ -131,11 +125,12 @@ public class Task1 extends Applet {
      }
      
    }
-    void returnKey(APDU apdu, byte keyType){
+    
+    void generateKeyPair(APDU apdu){
     	byte[] buffer = apdu.getBuffer();
-    	short keySize = 64;//64 bytes
-    	byte[] keyMod = new byte[keySize];
-    	byte[] keyExp= new byte[keySize];
+    	short pubSize = 64;//64 bytes
+    	byte[] pubMod = new byte[pubSize];
+    	byte[] pubExp= new byte[pubSize];
     	
     	byte[] delimitter = new byte [4];
     	delimitter[0] = (byte)0x00;
@@ -143,73 +138,46 @@ public class Task1 extends Applet {
     	delimitter[2] = (byte)0xED;
     	delimitter[3] = (byte)0x00;
     	
-    	for(short i = 0; i<keySize ; i+=4){
-    		keyMod[i] = 			keyExp[i] =				(byte)0xFE;
-    		keyMod[(short)(i+1)] = 	keyExp[(short)(i+1)] =	(byte)0xED;
-    		keyMod[(short)(i+2)] =	keyExp[(short)(i+2)] =	(byte)0xFA;
-    		keyMod[(short)(i+3)] =	keyExp[(short)(i+3)] =	(byte)0xCE;
+    	for(short i = 0; i<pubSize ; i+=4){
+    		pubMod[i] = 			pubExp[i] =				(byte)0xFE;
+    		pubMod[(short)(i+1)] = 	pubExp[(short)(i+1)] =	(byte)0xED;
+    		pubMod[(short)(i+2)] =	pubExp[(short)(i+2)] =	(byte)0xFA;
+    		pubMod[(short)(i+3)] =	pubExp[(short)(i+3)] =	(byte)0xCE;
     	}
     	
-    	if(keyType == 0x00){//public
-    		RSAPublicKey retKey;
-    		retKey=(RSAPublicKey)keyPair.getPublic();
-    		
-    		try{
-        		retKey.getModulus(keyMod, (short)0 );
-        	}catch(CryptoException e){
-        		ISOException.throwIt(e.getReason());
-    		}
-
-        	try{
-        		retKey.getExponent(keyExp, (short)0);
-        	}catch(CryptoException e){
-        		ISOException.throwIt(e.getReason());
-    		}
-    		
-    	}else if(keyType == 0x01){//private
-    		RSAPrivateKey retKey;
-    		retKey=(RSAPrivateKey)keyPair.getPrivate();
-    		
-    		try{
-        		retKey.getModulus(keyMod, (short)0 );
-        	}catch(CryptoException e){
-        		ISOException.throwIt(e.getReason());
-    		}
-
-        	try{
-        		retKey.getExponent(keyExp, (short)0);
-        	}catch(CryptoException e){
-        		ISOException.throwIt(e.getReason());
-    		}
-    		
-    	}else{//error
-    		ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
-    	}
     	
-    	Util.arrayCopyNonAtomic(keyMod, (short) 0, buffer, (short) 0,
-        		 keySize);
-    	
-    	Util.arrayCopyNonAtomic(delimitter, (short) 0, buffer, keySize,
-       		 (short)4);
-        
-        Util.arrayCopyNonAtomic(keyExp, (short) 0, buffer, (short)(keySize + 4),
-       		 keySize);
-        apdu.setOutgoingAndSend((short) 0, (short)((keySize*2)+4));
-    }
-    
-    void generateKeyPair(){
+    	RSAPublicKey pubKey;
     	
     	try {
     		keyPair = new KeyPair(KeyPair.ALG_RSA, KeyBuilder.LENGTH_RSA_512);
     	}catch(CryptoException e){
     		ISOException.throwIt(e.getReason());
     		}
+    	keyPair.genKeyPair();
+    	pubKey=(RSAPublicKey)keyPair.getPublic();
     	
-    	try {
-    		keyPair.genKeyPair();
+
+    	try{
+    		pubKey.getModulus(pubMod, (short)0 );
     	}catch(CryptoException e){
     		ISOException.throwIt(e.getReason());
-    		}
+		}
+
+    	try{
+    		pubKey.getExponent(pubExp, (short)0);
+    	}catch(CryptoException e){
+    		ISOException.throwIt(e.getReason());
+		}
+    	
+    	Util.arrayCopyNonAtomic(pubMod, (short) 0, buffer, (short) 0,
+        		 pubSize);
+    	
+    	Util.arrayCopyNonAtomic(delimitter, (short) 0, buffer, pubSize,
+       		 (short)4);
+        
+        Util.arrayCopyNonAtomic(pubExp, (short) 0, buffer, (short)(pubSize + 4),
+       		 pubSize);
+        apdu.setOutgoingAndSend((short) 0, (short)((pubSize*2)+4));
         
     }
     
