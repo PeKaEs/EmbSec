@@ -6,12 +6,12 @@ import javacard.framework.ISO7816;
 import javacard.framework.ISOException;
 import javacard.framework.Util;
 import javacard.security.MessageDigest;
-import javacard.security.PrivateKey;
-import javacard.security.PublicKey;
+
 import javacard.security.KeyBuilder;
 import javacard.security.KeyPair;
 import javacard.security.CryptoException;
-import javacard.security.Key;
+import javacard.security.ECPrivateKey;
+import javacard.security.ECPublicKey;
 import javacard.security.RSAPrivateKey;
 import javacard.security.RSAPublicKey;
 
@@ -39,16 +39,30 @@ public class Task1 extends Applet {
      		MessageDigest.ALG_SHA_512	-- SW2:03 CryptoException NO_SUCH_ALG
      		
      		KeyPair.ALG_RSA, KeyBuilder.LENGTH_RSA_512 -- Seems working
+     		
+     		EC_FP_112 -- works fine
+     		EC_FP_128 -- works fine
+     		EC_FP_160 -- works fine
+     		EC_FP_192 -- works fine
+     		EC_FP_224 -- does not work
+     		EC_FP_256 -- does not work
+     		EC_FP_384 -- does not work
+     		EC_FP_521 -- does not work 
 			*/
 			
 			private static final byte HW_INS_RSA_GEN = (byte) 0x10;
 			private static final byte HW_INS_RSA_GET_PRIV = (byte) 0x20;
+			private static final byte HW_INS_GEN_EC = (byte)0x40;
+			private static final byte HW_INS_GET_EC_PUB = (byte)0x42;
+			private static final byte HW_INS_GET_EC_PRIV = (byte)0x44;
+
 			
 			private byte [] receivedData;
 			private byte [] hashedData;
 			
 			private MessageDigest mesDig;
 			private KeyPair keyPair;
+			private KeyPair ECKeyPair;
 
     private Task1(byte[] bArray, short bOffset, byte bLength) {
         register();
@@ -125,12 +139,73 @@ public class Task1 extends Applet {
      	case HW_INS_RSA_GET_PRIV:
      		returnKey(apdu,(byte)0x01);
      		break;
+     	case HW_INS_GEN_EC:
+     		generateECKeyPair();
+     		break;
+     	case HW_INS_GET_EC_PUB:
+     		returnECKey(apdu,(byte)0x00);
+     		break;
+     	case HW_INS_GET_EC_PRIV:
+     		returnECKey(apdu,(byte)0x01);
+     		break;
+     		
      		
      	default:
      		ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
      }
      
    }
+    void returnECKey(APDU apdu, byte keyType){
+    	byte[] buffer = apdu.getBuffer();
+    	short keySize = 24;//24 bytes
+    	byte[] keyVal = new byte[keySize];
+    	
+    	if(keyType == 0x00){//public
+    		
+    		ECPublicKey retKey;
+    		//retKey=(ECPublicKey)keyPair.getPublic();
+    		
+    		retKey = (ECPublicKey) KeyBuilder.buildKey(KeyBuilder.ALG_TYPE_EC_FP_PUBLIC, KeyBuilder.LENGTH_EC_FP_192, false);
+    		
+    		try{
+        		retKey.getW(keyVal, (short)0 );
+        	}catch(CryptoException e){
+        		ISOException.throwIt(e.getReason());
+    		}
+    		
+    	}else if( keyType == 0x01){//private
+    		ECPrivateKey retKey;
+    		//retKey=(ECPrivateKey)keyPair.getPrivate();
+    		retKey = (ECPrivateKey) KeyBuilder.buildKey(KeyBuilder.ALG_TYPE_EC_FP_PRIVATE, KeyBuilder.LENGTH_EC_FP_192, false);
+
+    		try{
+        		retKey.getS(keyVal, (short)0 );
+        	}catch(CryptoException e){
+        		ISOException.throwIt(e.getReason());
+    		}
+    	}else{//error
+    		ISOException.throwIt(ISO7816.SW_COMMAND_NOT_ALLOWED);
+    	}
+    	
+    	Util.arrayCopyNonAtomic(keyVal, (short) 0, buffer, (short)0,
+          		 keySize);
+           apdu.setOutgoingAndSend((short) 0, keySize);
+    }
+
+    void generateECKeyPair(){
+    	try {
+    		ECKeyPair = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
+    	}catch(CryptoException e){
+    		ISOException.throwIt(e.getReason());
+    		}
+    	
+    	try {
+    		ECKeyPair.genKeyPair();
+    	}catch(CryptoException e){
+    		ISOException.throwIt(e.getReason());
+    		}
+    }
+    
     void returnKey(APDU apdu, byte keyType){
     	byte[] buffer = apdu.getBuffer();
     	short keySize = 64;//64 bytes

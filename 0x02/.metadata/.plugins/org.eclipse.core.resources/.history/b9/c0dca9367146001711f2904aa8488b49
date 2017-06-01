@@ -1,0 +1,36 @@
+import java.util.List;
+
+import javax.smartcardio.Card;
+import javax.smartcardio.CardChannel;
+import javax.smartcardio.CardException;
+import javax.smartcardio.CardTerminal;
+import javax.smartcardio.CommandAPDU;
+import javax.smartcardio.ResponseAPDU;
+import javax.smartcardio.TerminalFactory;
+public class Terminal {
+
+	public static void main(String[] args) {
+		TerminalFactory factory = TerminalFactory.getDefault();
+        try{
+		List<CardTerminal> terminals = factory.terminals().list();
+		System.out.println("Terminals: " + terminals);
+        }catch(CardException e){
+        	System.out.println(e);
+        }
+		
+        // get the first terminal
+        /*
+        CardTerminal terminal = terminals.get(0);
+        // establish a connection with the card
+        Card card = terminal.connect("T=0");
+        System.out.println("card: " + card);
+        CardChannel channel = card.getBasicChannel();
+        byte[] c1 = {(byte)0x80,0x20,0x00,0x00,0x01,(byte)0xFE,0x00};
+        ResponseAPDU r = channel.transmit(new CommandAPDU(c1));
+        System.out.println("response: " + toString(r.getBytes()));
+        */// disconnect
+        //card.disconnect(false);
+
+	}
+
+}
