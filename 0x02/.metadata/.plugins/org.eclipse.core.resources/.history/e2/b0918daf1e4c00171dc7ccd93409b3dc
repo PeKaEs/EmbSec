@@ -1,0 +1,10 @@
+
+public class TerminaApp {
+
+	public static void main(String[] args) {
+		Terminal elo = new Terminal("localhost",8888);
+		elo.connect("elo");
+
+	}
+
+}

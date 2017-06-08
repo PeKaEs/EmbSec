@@ -3,6 +3,12 @@
 <fullyQualifiedTypeName name="javacard.security.MessageDigest"/>
 <fullyQualifiedTypeName name="javacard.security.PublicKey"/>
 <fullyQualifiedTypeName name="javacard.security.PrivateKey"/>
+<fullyQualifiedTypeName name="javacard.security.Key"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.awt.List"/>
+<fullyQualifiedTypeName name="javax.smartcardio.CardException"/>
+<fullyQualifiedTypeName name="javacard.security.ECPublicKey"/>
+<fullyQualifiedTypeName name="javacard.security.ECPrivateKey"/>
 <fullyQualifiedTypeName name="javacard.security.KeyBuilder"/>
 <fullyQualifiedTypeName name="javacard.security.CryptoException"/>
 </qualifiedTypeNameHistroy>

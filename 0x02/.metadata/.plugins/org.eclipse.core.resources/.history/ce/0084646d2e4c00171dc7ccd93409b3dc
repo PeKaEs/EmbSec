@@ -1,0 +1,18 @@
+import javax.smartcardio.CardException;
+
+public class TerminaApp {
+
+	public static void main(String[] args) {
+		
+		Terminal elo = new Terminal("127.0.0.1",8888);
+		try{
+		elo.connect("T=1");
+		}catch(CardException e){
+			System.out.println(e);
+		}
+		
+		System.out.println(elo.getName());
+		
+	}
+
+}

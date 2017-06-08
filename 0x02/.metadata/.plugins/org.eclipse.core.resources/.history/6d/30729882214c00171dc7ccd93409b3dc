@@ -1,0 +1,40 @@
+import javax.smartcardio.CardException;
+
+import java.util.List;
+
+import javax.smartcardio.*;
+
+public class TerminaApp {
+
+	public static void main(String[] args) {
+		/*
+		Terminal elo = new Terminal("127.0.0.1",8888);
+		try{
+		elo.connect("elo");
+		}catch(CardException e){
+			System.out.println(e);
+		}
+		*/
+        // show the list of available terminals
+        TerminalFactory factory = TerminalFactory.getDefault();
+        try{
+        List<CardTerminal> terminals = factory.terminals().list();
+        
+        System.out.println("Terminals: " + terminals);
+        // get the first terminal
+        CardTerminal terminal = terminals.get(0);
+        // establish a connection with the card
+        Card card = terminal.connect("T=0");
+        System.out.println("card: " + card);
+        CardChannel channel = card.getBasicChannel();
+        byte c1[]={(byte)0x80,0x00,0x00,0x00,0x00};
+        ResponseAPDU r = channel.transmit(new CommandAPDU(c1));
+        System.out.println("response: " + r.getBytes());
+        // disconnect
+        card.disconnect(false);
+        }catch(CardException e){
+			System.out.println(e);
+		}
+	}
+
+}

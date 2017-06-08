@@ -18,7 +18,7 @@
  * 
  * $Id: $ 
  */
- 
+
 import java.io.IOException; 
 import java.io.InputStream; 
 import java.io.OutputStream; 
@@ -35,9 +35,10 @@ import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU; 
 import javax.smartcardio.ResponseAPDU; 
  
-import javacard.apduio.CadClientInterface; 
-import javacard.apduio.CadDevice; 
-import javacard.apduio.CadTransportException; 
+import com.sun.javacard.*;
+import com.sun.javacard.apduio.CadClientInterface;
+import com.sun.javacard.apduio.CadDevice; 
+import com.sun.javacard.apduio.CadTransportException; 
  
 /**
  * CardTerminal implementation for Sun's CREF emulator. This 
@@ -64,7 +65,7 @@ public class Terminal extends CardTerminal
  
     private final Object terminal; 
     private boolean wasCardPresent; 
-    private CREFCard card; 
+    public CREFCard card; 
  
     /**
      * Listens for instances of the CREF emulator on the specified host and port. 
@@ -88,12 +89,13 @@ public class Terminal extends CardTerminal
     public synchronized Card connect(String protocol) throws CardException { 
         synchronized (terminal) { 
             try { 
-                if (card == null && !isCardPresent()) { 
+            	if (card == null) { 
+                    card = new CREFCard(new Socket(hostName, port)); 
+                }
+            	if ( !isCardPresent()) { 
                     throw new CardException("No card present"); 
                 } 
-                if (card == null) { 
-                    card = new CREFCard(new Socket(hostName, port)); 
-                } 
+            	 
                 return card; 
             } catch (IOException ioe) { 
                 throw new CardException(ioe.toString()); 
@@ -194,7 +196,7 @@ public class Terminal extends CardTerminal
     /**
      * This merely wraps channel. 
      */ 
-    private class CREFCard extends Card 
+    public class CREFCard extends Card 
     { 
         private CREFCardChannel basicChannel; 
  

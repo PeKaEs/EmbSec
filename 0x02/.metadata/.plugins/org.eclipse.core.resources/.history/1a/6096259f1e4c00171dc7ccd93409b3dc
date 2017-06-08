@@ -1,0 +1,9 @@
+
+public class TerminaApp {
+
+	public static void main(String[] args) {
+		Terminal elo = new Terminal("a",11);
+
+	}
+
+}
